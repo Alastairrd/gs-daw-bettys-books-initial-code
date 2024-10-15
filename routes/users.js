@@ -7,7 +7,7 @@ router.get("/register", function (req, res, next) {
 	res.render("register.ejs");
 });
 
-router.get("/list", function (req, res, next) {
+router.get("/list", global.redirectLogin, function (req, res, next) {
     let sqlquery = "SELECT username, firstName, lastName, email FROM users" // query database to get all the books
     // execute sql query
     db.query(sqlquery, (err, result) => {
@@ -27,6 +27,9 @@ router.post("/loggedin", function (req, res, next) {
 	const username = req.body.username;
 	const password = req.body.password;
 
+	// Save user session here, when login is successful
+	req.session.userId = username;
+
 	let sqlquery = "SELECT hashedPassword FROM users WHERE username = ?";
 
 	db.query(sqlquery, username, (err, result) => {
@@ -34,15 +37,17 @@ router.post("/loggedin", function (req, res, next) {
 			err(next);
 		}
 
-        hashedPassword = result[0].hashedPassword;
+		hashedPassword = result[0].hashedPassword;
 
 		// Compare the password supplied with the password in the database
 		bcrypt.compare(
-			req.body.password,
+			password,
 			hashedPassword,
 			function (err, result) {
 				if (err) {
-					res.render("loggedin.ejs", { loginResult: "Look there was a bit of an error tbh" });
+					res.render("loggedin.ejs", {
+						loginResult: "Look there was a bit of an error tbh",
+					});
 				} else if (result == true) {
 					res.render("loggedin.ejs", { loginResult: "Yeah ya good" });
 				} else {
@@ -50,8 +55,6 @@ router.post("/loggedin", function (req, res, next) {
 				}
 			}
 		);
-
-		
 	});
 });
 

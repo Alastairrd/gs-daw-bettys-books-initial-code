@@ -1,14 +1,22 @@
 // Import express and ejs
 var express = require ('express')
+var session = require ('express-session')
 var ejs = require('ejs')
 
 //Import mysql module
 var mysql = require('mysql2')
 
-
 // Create the express application object
 const app = express()
 const port = 8000
+
+global.redirectLogin = (req, res, next) => {
+    if (!req.session.userId ) {
+      res.redirect('/users/login') // redirect to the login page
+    } else { 
+        next (); // move to the next middleware function
+    } 
+}
 
 // Tell Express that we want to use EJS as the templating engine
 app.set('view engine', 'ejs')
@@ -18,6 +26,16 @@ app.use(express.urlencoded({ extended: true }))
 
 // Set up public folder (for css and statis js)
 app.use(express.static(__dirname + '/public'))
+
+// Create a session
+app.use(session({
+    secret: 'somerandomstuff',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}))
 
 // Define the database connection
 const db = mysql.createConnection ({
