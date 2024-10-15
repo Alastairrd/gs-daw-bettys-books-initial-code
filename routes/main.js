@@ -11,10 +11,6 @@ router.get('/about',function(req, res, next){
     res.render('about.ejs')
 })
 
-router.get('/about/test',function(req, res, next){
-    res.render('about.ejs')
-})
-
 router.get('/logout', redirectLogin, (req,res) => {
     req.session.destroy(err => {
     if (err) {
