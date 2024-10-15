@@ -12,7 +12,7 @@ const port = 8000
 
 global.redirectLogin = (req, res, next) => {
     if (!req.session.userId ) {
-      res.redirect('users/login') // redirect to the login page
+      res.redirect('../users/login') // redirect to the login page
     } else { 
         next (); // move to the next middleware function
     } 
