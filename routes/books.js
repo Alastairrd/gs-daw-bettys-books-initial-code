@@ -40,6 +40,7 @@ router.post('/bookadded', function (req, res, next) {
     let newrecord = [req.body.name, req.body.price]
     db.query(sqlquery, newrecord, (err, result) => {
         if (err) {
+            console.log("Error posting")
             next(err)
         }
         else
