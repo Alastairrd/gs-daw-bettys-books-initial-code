@@ -7,7 +7,7 @@ router.get("/register", function (req, res, next) {
 	res.render("register.ejs");
 });
 
-router.get("/list", global.redirectLogin, function (req, res, next) {
+router.get("/list", redirectLogin, function (req, res, next) {
     let sqlquery = "SELECT username, firstName, lastName, email FROM users" // query database to get all the books
     // execute sql query
     db.query(sqlquery, (err, result) => {
