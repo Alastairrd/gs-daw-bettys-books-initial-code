@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Get weather forecast on <%=shopData.shopName%></title>
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1><%=shopData.shopName%>: Find weather</h1>
+    <form method="GET" action="weather">
+        <p>City name: <input id="location" type="text" name="location" value="" /></p>
+        <input type="submit" value="Get weather" />
+    </form>
+
+    <% if (present) { %>
+    <div id="forecast-result" style="display: block">
+      <h2>Forecast result for <%=location%></h2>
+      <p>The max temperature is: <span style="color:chocolate"><%=result.main.temp_max%></span></p>
+      <p>The min temperature is: <span style="color:dodgerblue"><%=result.main.temp_min%></span></p>
+      <p>The humidity is: <%=result.main.humidity%></p>
+      <p>The wind speed is: <%=result.wind.speed%></p>
+    </div>
+   <% } %>
+  </body>
+</html>
+
