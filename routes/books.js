@@ -34,18 +34,21 @@ router.get('/addbook', function (req, res, next) {
     res.render('addbook.ejs')
 })
 
-router.post('/bookadded', [check('name').notEmpty().isLength({max: 100}), check('price').notEmpty()], function (req, res, next) {
+router.post('/bookadded', 
+    [check('name').notEmpty().isLength({max: 50}),
+     check('price').notEmpty(),
+     check('author').notEmpty().isLength({max: 64})], function (req, res, next) {
     // saving data in database
-    let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)"
+    let sqlquery = "CALL add_book_auth(?,?,?)"
     // execute sql query
-    let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.price)]
+    let newrecord = [req.sanitize(req.body.name), req.sanitize(req.body.price), req.sanitize(req.body.author)]
     db.query(sqlquery, newrecord, (err, result) => {
         if (err) {
             console.log("Error posting")
             next(err)
         }
         else
-            res.send(' This book is added to database, name: '+ req.sanitize(req.body.name) + ' price '+ req.santize(req.body.price))
+            res.send(' This book and author is added to database, name: '+ req.sanitize(req.body.name) + ', price: '+ req.sanitize(req.body.price) + ', author: ' + req.sanitize(req.body.author))
     })
 }) 
 
